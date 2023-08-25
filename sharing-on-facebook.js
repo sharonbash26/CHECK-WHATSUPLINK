@@ -45,18 +45,42 @@ function doUploadImg(imgDataUrl, onSuccess) {
 }
 
 function shareOnWhatsApp() {
-    const imgDataUrl = gElCanvas.toDataURL('image/jpeg') 
+    const imgDataUrl = gElCanvas.toDataURL('image/jpeg');
 
-    function onSuccess(uploadedImgUrl) {
-        // Handle some special characters
-        const url = encodeURIComponent(uploadedImgUrl)
-        window.open(`https://api.whatsapp.com/send?text=&data=${encodeURIComponent(imgDataUrl)}`)
-        // const whatsappShareLink = `https://api.whatsapp.com/send?text=${url}`;
-        // window.open(whatsappShareLink);
-    }
-    
-    // Send the image to the server
-    doUploadImg(imgDataUrl, onSuccess)
+    // Convert the data URL to a Blob
+    const blob = dataURLToBlob(imgDataUrl);
+
+    // Create a FormData object and append the Blob to it
+    const formData = new FormData();
+    formData.append('image', blob, 'meme.jpg');
+
+    // Encode the FormData object as URL-friendly string
+    const formDataString = encodeURIComponent(JSON.stringify([...formData]));
+
+    // Open the WhatsApp share link with the encoded FormData
+    window.open(`https://api.whatsapp.com/send?text=&data=${formDataString}`);
 }
+
+// Rest of your code...
+
+// Convert a data URL to a Blob
+function dataURLToBlob(dataURL) {
+    const arr = dataURL.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    const n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    for (let i = 0; i < n; i++) {
+        u8arr[i] = bstr.charCodeAt(i);
+    }
+    return new Blob([u8arr], { type: mime });
+}
+
+
+
+
+
+
+
 
 
