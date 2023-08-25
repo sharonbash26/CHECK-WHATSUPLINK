@@ -50,7 +50,7 @@ function shareOnWhatsApp() {
     function onSuccess(uploadedImgUrl) {
         // Handle some special characters
         const url = encodeURIComponent(uploadedImgUrl)
-        window.open(`https://api.whatsapp.com/send?text=&data=${url}`)
+        window.open(`https://api.whatsapp.com/send?text=&data=${encodeURIComponent(imgDataUrl)}`)
         // const whatsappShareLink = `https://api.whatsapp.com/send?text=${url}`;
         // window.open(whatsappShareLink);
     }
